@@ -1,0 +1,7 @@
+FROM alpine:latest
+
+COPY ./bin/math-service /math-service
+
+EXPOSE 80
+
+CMD ["/math-service"]

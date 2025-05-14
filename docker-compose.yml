@@ -1,0 +1,37 @@
+services:
+  loadbalancer:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - core-service
+      - math-service
+    networks:
+      - backend
+
+  core-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.core
+    expose:
+      - 80
+    networks:
+      - backend
+    restart: unless-stopped
+
+  math-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.math
+    expose:
+      - 80
+    networks:
+      - backend
+    restart: unless-stopped
+
+networks:
+  backend:
+    driver: bridge
